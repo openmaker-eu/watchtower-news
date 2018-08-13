@@ -14,6 +14,7 @@ from logging import handlers
 import logging
 from mongoengine import connect
 import time
+import os
 
 secret_key = 'PEO+{+RlTK[3~}TS-F%[9J/sIp>W7!r*]YV75GZV)e;Q8lAdNE{m@oWK.+u-&z*-p>~Xa!Z8j~{z,BVv.e0GChY{(1.KVForO#rQ'
 
@@ -22,6 +23,8 @@ app_settings = dict(
     cookie_secret=secret_key,
     port=config("HOST_PORT")
 )
+
+os.makedirs('./logs', exist_ok=True)
 
 log_file = "./logs/daily_" + time.strftime("%d-%m-%Y") + ".log"
 
