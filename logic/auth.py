@@ -26,6 +26,7 @@ def check_password(hashed_password, user_password):
 
 
 def register_user(invitation_code, username, password):
+    logging.info("username: {0}".format(username))
     password = hash_password(password)
 
     try:
@@ -33,7 +34,8 @@ def register_user(invitation_code, username, password):
     except DoesNotExist:
         return {'response': False, 'error': 'Invitation Code is invalid.'}
     except Exception as e:
-        return {'response': False, 'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     try:
         user = User(username=username, password=password)
@@ -41,7 +43,8 @@ def register_user(invitation_code, username, password):
     except NotUniqueError:
         return {'response': False, 'error': 'Username is already registered!'}
     except Exception as e:
-        return {'response': False, 'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     invitation.is_active = False
     invitation.save()
@@ -50,6 +53,7 @@ def register_user(invitation_code, username, password):
 
 
 def login_user(username, password):
+    logging.info("username: {0}".format(username))
     try:
         user = User.objects.get(username=username)
         if not check_password(user.password, str(password)):
@@ -57,18 +61,21 @@ def login_user(username, password):
     except DoesNotExist:
         return {'response': False, 'error': 'Credentials are not correct!'}
     except Exception as e:
-        return {'response': False, 'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     return {'response': True, 'api_token': user.api_token}
 
 
 def get_user_profile(user_id):
+    logging.info("user_id: {0}".format(user_id))
     try:
         user = User.objects.get(id=user_id)
     except DoesNotExist:
         return {'response': False}
     except Exception as e:
-        return {'response': False, 'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     if user:
         logging.info(user.to_dict())
@@ -78,12 +85,14 @@ def get_user_profile(user_id):
 
 
 def refresh_api_token(user_id):
+    logging.info("user_id: {0}".format(user_id))
     try:
         user = User.objects.get(id=user_id)
     except DoesNotExist:
         return {'response': False}
     except Exception as e:
-        return {'response': False, 'error': str(e)}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     if user:
         new_token = ''.join([random.choice(string.ascii_letters + string.digits) for _ in range(40)])
@@ -100,7 +109,8 @@ def get_user_with_api_token(api_token):
     except DoesNotExist:
         return {'response': False}
     except Exception as e:
-        return {'response': False, 'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     if user:
         return {

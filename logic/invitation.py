@@ -1,3 +1,5 @@
+import logging
+
 from mongoengine import DoesNotExist
 import json
 
@@ -7,6 +9,7 @@ __author__ = 'Enis Simsar'
 
 
 def get_invitation(user_id, invitation_id):
+    logging.info("user_id: {0}, invitation_id: {1}".format(user_id, invitation_id))
     if type(invitation_id) is not str:
         return {'error': 'invitation_id must be string!'}
 
@@ -15,7 +18,8 @@ def get_invitation(user_id, invitation_id):
     except DoesNotExist:
         return {}
     except Exception as e:
-        return {'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     if invitation is None:
         return {}
@@ -24,12 +28,14 @@ def get_invitation(user_id, invitation_id):
 
 
 def get_invitations(user_id):
+    logging.info("user_id: {0}".format(user_id))
     try:
         invitations = Invitation.objects.filter(user_id=user_id)
     except DoesNotExist:
         return {}
     except Exception as e:
-        return {'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     if invitations is None:
         return []
@@ -43,11 +49,13 @@ def get_invitations(user_id):
 
 
 def post_invitation(user_id):
+    logging.info("user_id: {0}".format(user_id))
     try:
         invitation = Invitation(user_id=user_id)
         invitation.save()
     except Exception as e:
-        return {'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     return {
         'response': True,
@@ -56,6 +64,7 @@ def post_invitation(user_id):
 
 
 def delete_invitation(user_id, invitation_id):
+    logging.info("user_id: {0}, invitation_id: {1}".format(user_id, invitation_id))
     if type(invitation_id) is not str:
         return {'error': 'invitation_id must be string!'}
 
@@ -67,7 +76,8 @@ def delete_invitation(user_id, invitation_id):
             'response': False
         }
     except Exception as e:
-        return {'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     invitation.delete()
 
@@ -75,6 +85,7 @@ def delete_invitation(user_id, invitation_id):
 
 
 def post_invitation_is_active(user_id, invitation_id, status):
+    logging.info("user_id: {0}, invitation_id: {1}".format(user_id, invitation_id))
     if type(invitation_id) is not str:
         return {'error': 'invitation_id must be string!'}
 
@@ -92,7 +103,8 @@ def post_invitation_is_active(user_id, invitation_id, status):
             'response': False
         }
     except Exception as e:
-        return {'error': e}
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
 
     invitation.is_active = True if status == 1 else False
 

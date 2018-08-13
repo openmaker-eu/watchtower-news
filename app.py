@@ -34,7 +34,7 @@ daily_handler = handlers.TimedRotatingFileHandler(
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)s %(asctime)s file:%(filename)s func:%(funcName)s line:%(lineno)s] %(message)s",
+    format="[%(levelname)s %(asctime)s %(pathname)s@%(funcName)s:%(lineno)s] %(message)s",
     datefmt="%d/%m/%Y %H:%M:%S",
     handlers=[
         daily_handler,
