@@ -25,13 +25,13 @@ class InvitationHandler(JsonAuthHandler):
         self.write_json()
 
     def put(self, invitation_id):
-        if 'status' not in self.request.arguments:
-            self.response = {'error': 'status is required!'}
+        if 'is_active' not in self.request.arguments:
+            self.response = {'error': 'is_active is required!'}
             self.write_json()
             return
 
-        status = self.request.arguments['status']
-        self.response = post_invitation_is_active(self.user_id, invitation_id, status)
+        is_active = self.request.arguments['is_active']
+        self.response = post_invitation_is_active(self.user_id, invitation_id, is_active)
         self.write_json()
 
     def delete(self, invitation_id):

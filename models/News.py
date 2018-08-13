@@ -7,7 +7,7 @@ __author__ = 'Enis Simsar'
 
 
 class News(BaseDocument):
-    topic_id = ReferenceField(Topic, dbref=True, reverse_delete_rule=CASCADE)
+    topic_id = ReferenceField(Topic, reverse_delete_rule=CASCADE)
     meta = {'collection': 'news'}
 
     def schema(self):

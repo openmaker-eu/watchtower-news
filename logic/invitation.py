@@ -84,16 +84,10 @@ def delete_invitation(user_id, invitation_id):
     return {'response': True}
 
 
-def post_invitation_is_active(user_id, invitation_id, status):
+def post_invitation_is_active(user_id, invitation_id, is_active):
     logging.info("user_id: {0}, invitation_id: {1}".format(user_id, invitation_id))
     if type(invitation_id) is not str:
         return {'error': 'invitation_id must be string!'}
-
-    if type(status) is not int:
-        return {'error': 'status must be integer!'}
-
-    if status not in range(2):
-        return {'error': 'status must be 0 or 1!'}
 
     try:
         invitation = Invitation.objects.get(id=invitation_id, user_id=user_id)
@@ -106,7 +100,7 @@ def post_invitation_is_active(user_id, invitation_id, status):
         logging.error("exception: {0}".format(str(e)))
         return {'error': str(e)}
 
-    invitation.is_active = True if status == 1 else False
+    invitation.is_active = is_active
 
     invitation.save()
 

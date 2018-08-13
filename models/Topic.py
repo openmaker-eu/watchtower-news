@@ -7,11 +7,11 @@ __author__ = 'Enis Simsar'
 
 
 class Topic(BaseDocument):
-    user_id = ReferenceField(User, dbref=True, reverse_delete_rule=CASCADE)
-    topic_name = StringField(max_length=20)
-    topic_desc = StringField(max_length=400)
-    keywords = ListField(StringField(), max_length=10)
-    languages = ListField()
+    user_id = ReferenceField(User, reverse_delete_rule=CASCADE)
+    name = StringField(max_length=20, required=True)
+    description = StringField(max_length=400, required=True)
+    keywords = ListField(StringField(), max_length=10, required=True)
+    languages = ListField(StringField(max_length=2), max_length=5, required=True)
     is_active = BooleanField()
 
     meta = {'collection': 'topics'}

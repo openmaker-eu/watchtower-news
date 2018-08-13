@@ -20,7 +20,8 @@ url_patterns = [
     (r"/user/(refresh_token)$", UserHandler),
 
     # TOPIC
-    (r"/Topic", TopicHandler),
+    (r"/topics", TopicHandler),
+    (r"/topics/(.+$)", TopicHandler),
 
     # NEWS
     (r"/News", NewsHandler),
@@ -28,5 +29,4 @@ url_patterns = [
     # INVITATIONS
     (r'/invitations', InvitationHandler),
     (r'/invitations/(.+$)', InvitationHandler),
-    (r'/invitations/(.+)/(edit)$', InvitationHandler),
 ]

@@ -27,21 +27,19 @@ class AuthHandler(JsonHandler):
                 password = self.request.arguments['password']
                 invitation_code = self.request.arguments['invitation_code']
                 self.response = register_user(invitation_code, username, password)
-            self.write_json()
-            self.finish()
+        else:
+            self.response = None
+            if 'username' not in self.request.arguments:
+                self.response = {'error': 'username is required!'}
+            if 'password' not in self.request.arguments:
+                self.response = {'error': 'password is required!'}
 
-        self.response = None
-        if 'username' not in self.request.arguments:
-            self.response = {'error': 'username is required!'}
-        if 'password' not in self.request.arguments:
-            self.response = {'error': 'password is required!'}
+            if self.response is None:
+                username = self.request.arguments['username']
+                password = self.request.arguments['password']
+                self.response = login_user(username, password)
 
-        if self.response is None:
-            username = self.request.arguments['username']
-            password = self.request.arguments['password']
-            self.response = login_user(username, password)
         self.write_json()
-        self.finish()
 
 
 class UserHandler(JsonAuthHandler):
