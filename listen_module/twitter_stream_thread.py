@@ -1,4 +1,4 @@
-__author__ = ['Enis Simsar']
+__author__ = 'Enis Simsar'
 
 import json
 import re
@@ -13,7 +13,7 @@ from decouple import config
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
-from models.Topic import Topic
+from models.Tweet import Topic
 
 from utils.Connections import Connection
 

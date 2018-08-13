@@ -1,14 +1,13 @@
 """
-News Handlers for Watchtower News
+Main Handlers for Watchtower News
 """
 
-__author__ = ['Enis Simsar', 'Kemal Berk Kocabagli']
+__author__ = 'Enis Simsar'
 
-import tornado.web
-import tornado.escape
+from .base import BaseHandler
 
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(BaseHandler):
     def data_received(self, chunk):
         pass
 

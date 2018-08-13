@@ -1,14 +1,12 @@
 """
 News Handlers for Watchtower News
 """
+from handlers.base import JsonAuthHandler
 
-__author__ = ['Enis Simsar', 'Kemal Berk Kocabagli']
-
-import tornado.web
-import tornado.escape
+__author__ = 'Enis Simsar'
 
 
-class NewsHandler(tornado.web.RequestHandler):
+class NewsHandler(JsonAuthHandler):
     def data_received(self, chunk):
         pass
 

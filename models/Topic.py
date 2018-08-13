@@ -1,54 +1,26 @@
-__author__ = ['Enis Simsar']
+from mongoengine import CASCADE, ReferenceField, StringField, ListField, BooleanField
 
-from utils.Connections import Connection
-from models.Model import Model
+from models.User import User
+from models.Base import BaseDocument, BaseSchema
+
+__author__ = 'Enis Simsar'
 
 
-class Topic(Model):
-    __slots__ = ['topic_id', 'topic_name', 'topic_description', 'keywords', 'languages', 'creation_time', 'type',
-                 'last_tweet_date', 'is_running' 'last_news_date', 'is_masked_location', 'news_count', 'tweet_count']
+class Topic(BaseDocument):
+    user_id = ReferenceField(User, dbref=True, reverse_delete_rule=CASCADE)
+    topic_name = StringField(max_length=20)
+    topic_desc = StringField(max_length=400)
+    keywords = ListField(StringField(), max_length=10)
+    languages = ListField()
+    is_active = BooleanField()
 
-    @staticmethod
-    def fields():
-        return [
-            'topic_id',
-            'topic_name',
-            'topic_description',
-            'keywords',
-            'languages',
-            'creation_time',
-            'last_tweet_date',
-            'is_running',
-            'last_news_date',
-            'is_masked_location'
-        ]
+    meta = {'collection': 'topics'}
 
-    @staticmethod
-    def table_name():
-        return "topics"
+    def schema(self):
+        return TopicSchema()
 
-    @staticmethod
-    def model_id_column():
-        return "topic_id"
 
-    @staticmethod
-    def hidden_fields():
-        pass
+class TopicSchema(BaseSchema):
+    class Meta:
+        model = Topic
 
-    # TODO: Change MongoDB calls
-    def __getattribute__(self, item):
-        if item in ['keywords', 'languages']:
-            return object.__getattribute__(self, item).split(',')
-        if item == 'news_count':
-            return Connection.Instance().newsPoolDB[
-                str(object.__getattribute__(self, self.model_id_column()))].find().count()
-        if item == 'tweet_count':
-            return Connection.Instance().db[
-                str(object.__getattribute__(self, self.model_id_column()))].find().count()
-        try:
-            return object.__getattribute__(self, item)
-        except AttributeError:
-            return None
-
-    def __init__(self, model):
-        super().__init__(model)

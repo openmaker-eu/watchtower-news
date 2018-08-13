@@ -1,8 +1,5 @@
 
-__author__ = ['Enis Simsar']
-
-
-from utils.Connections import Connection
+__author__ = 'Enis Simsar'
 
 
 def get_topics():
@@ -21,9 +18,5 @@ def delete_topic():
     pass
 
 
-def start_topic():
-    pass
-
-
-def stop_topic():
+def post_topic_is_active():
     pass
