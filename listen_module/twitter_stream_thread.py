@@ -1,21 +1,18 @@
+from mongoengine import signals
+
 __author__ = 'Enis Simsar'
 
 import json
 import re
-import sys
 import threading
 from datetime import datetime
 
-sys.path.append('./')
-
-from bson.objectid import ObjectId
 from decouple import config
 from tweepy import OAuthHandler
 from tweepy import Stream
 from tweepy.streaming import StreamListener
-from models.Tweet import Topic
-
-from utils.Connections import Connection
+from models.Tweet import Tweet
+from models.Topic import Topic
 
 
 def get_info(topic_dic):
@@ -24,7 +21,7 @@ def get_info(topic_dic):
     lang = []
     for key in topic_dic:
         topic = topic_dic[key]
-        topics = topics + [topic['topic_id']]
+        topics = topics + [topic['id']]
         keywords = keywords + topic['keywords']
         lang = lang + topic['languages']
     lang = list(set(lang))
@@ -39,48 +36,34 @@ def get_info(topic_dic):
     return result
 
 
-def get_next_tweets_sequence():
-    cursor = Connection.Instance().db["counters"].find_and_modify(
-        query={'_id': "tweetDBId"},
-        update={'$inc': {'seq': 1}},
-        new=True,
-        upsert=True
-    )
-    return cursor['seq']
+def create_tweet(topic_id, tweet):
+    topic = Topic.objects.get(id=topic_id)
+
+    tweet_obj = Tweet()
+    tweet_obj.topic_id = topic.id
+    tweet_obj.published_at = datetime.fromtimestamp(int(tweet['timestamp_ms']) / 1e3)
+    tweet_obj.entry = tweet
+
+    tweet_obj.save()
+
+    topic.last_tweet_at = datetime.now
+    topic.save()
 
 
 def separates_tweet(topic_dic, tweet):
-    try:
-        for key in topic_dic:
-            topic = topic_dic[key]
-            if tweet['lang'] in topic['languages']:
-                for keyword in topic['keywords']:
-                    keyword = re.compile(keyword.replace(" ", "(.?)"), re.IGNORECASE)
-                    tweet['tweetDBId'] = get_next_tweets_sequence()
-                    if 'extended_tweet' in tweet and 'full_text' in tweet['extended_tweet']:
-                        if re.search(keyword, str(tweet['extended_tweet']['full_text'])):
-                            updated_time = datetime.fromtimestamp(int(tweet['timestamp_ms']) / 1e3)
-                            Topic.update_by_id({'last_tweet_date': updated_time}, topic['topic_id'])
-                            tweet['_id'] = ObjectId()
-                            if tweet['entities']['urls']:
-                                tweet['redis'] = False
-                            else:
-                                tweet['redis'] = True
-                            Connection.Instance().db[str(topic['topic_id'])].insert_one(tweet)
-                            break
-                    else:
-                        if re.search(keyword, str(tweet['text'])):
-                            updated_time = datetime.fromtimestamp(int(tweet['timestamp_ms']) / 1e3)
-                            Topic.update_by_id({'last_tweet_date': updated_time}, topic['topic_id'])
-                            tweet['_id'] = ObjectId()
-                            if tweet['entities']['urls'] == [] or tweet['entities']['urls'][0]['expanded_url'] is None:
-                                tweet['redis'] = True
-                            else:
-                                tweet['redis'] = False
-                            Connection.Instance().db[str(topic['topic_id'])].insert_one(tweet)
-                            break
-    except Exception as e:
-        pass
+    for key in topic_dic:
+        topic = topic_dic[key]
+        if tweet['lang'] in topic['languages']:
+            for keyword in topic['keywords']:
+                keyword = re.compile(keyword.replace(" ", "(.?)"), re.IGNORECASE)
+                if 'extended_tweet' in tweet and 'full_text' in tweet['extended_tweet']:
+                    if re.search(keyword, str(tweet['extended_tweet']['full_text'])):
+                        create_tweet(key, tweet)
+                        break
+                else:
+                    if re.search(keyword, str(tweet['text'])):
+                        create_tweet(key, tweet)
+                        break
 
 
 # Accessing Twitter API
@@ -100,13 +83,9 @@ class StdOutListener(StreamListener):
 
     def on_data(self, data):
         if not self.terminate:
-            try:
-                tweet = json.loads(data)
-                separates_tweet(self.topic_dic, tweet)
-                return True
-            except Exception as e:
-                pass
-                return True
+            tweet = json.loads(data)
+            separates_tweet(self.topic_dic, tweet)
+            return True
         else:
             return False
 
@@ -131,11 +110,13 @@ class StreamCreator():
         # This handles Twitter authetification and the connection to Twitter Streaming API
         self.l = StdOutListener(topic_dic)
 
+        signals.post_save.connect(Tweet.post_save, sender=Tweet)
+
         self.info = get_info(topic_dic=topic_dic)
         self.keywords = self.info['keywords']
         self.lang = self.info['lang']
-        self.alerts = self.info['topics']
-        print(self.alerts)
+        self.topics = self.info['topics']
+        print(self.topics)
         print(self.keywords)
         print(self.lang)
         self.auth = OAuthHandler(consumer_key, consumer_secret)

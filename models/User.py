@@ -1,9 +1,8 @@
 import random
 import string
 
-from mongoengine import StringField, ListField, ReferenceField
+from mongoengine import StringField, ListField, ObjectIdField
 
-#from models.News import News
 from models.Base import BaseDocument, BaseSchema
 
 __author__ = 'Enis Simsar'
@@ -14,7 +13,8 @@ class User(BaseDocument):
     password = StringField()
     api_token = StringField(max_length=40, default=''.join(
         [random.choice(string.ascii_letters + string.digits) for _ in range(40)]))
-    #bookmarks = ListField(ReferenceField(News))
+    bookmarks = ListField(ObjectIdField())
+    domains = ListField(StringField())
     meta = {'collection': 'users'}
 
     def schema(self):

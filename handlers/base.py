@@ -1,6 +1,5 @@
 import tornado.web
-from raven.utils import json
-
+import json
 from logic.auth import get_user_with_api_token
 
 __author__ = 'Enis Simsar'
