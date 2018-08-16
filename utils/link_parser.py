@@ -101,7 +101,7 @@ def parse_links(topic_id, data):
             dic = get_link_info(link)
             if dic is not None:
                 try:
-                    news = News.objects.get(Q(topic_id=topic_id) & (Q(domain=dic['domain']) | Q(title=dic['title'])))
+                    news = News.objects.get(Q(topic_id=topic_id) & Q(domain=dic['domain']) & Q(title=dic['title']))
                     update_news(topic, news, data, short_link)
                 except DoesNotExist:
                     dic['mentions'] = [data]
