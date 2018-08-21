@@ -57,7 +57,8 @@ def post_topic(user_id, payload):
         'description': payload['description'],
         'keywords': payload['keywords'],
         'languages': payload['languages'],
-        'is_active': payload['is_active']
+        'is_active': payload['is_active'],
+        'domain_filter': payload['domain_filter']
     }
     try:
         topic = Topic(**data)
@@ -100,6 +101,9 @@ def update_topic(user_id, topic_id, payload):
 
     if 'is_active' in payload:
         topic.is_active = payload['is_active']
+
+    if 'domain_filter' in payload:
+        topic.domain_filter = payload['domain_filter']
 
     try:
         topic.save()

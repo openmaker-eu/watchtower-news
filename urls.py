@@ -3,6 +3,7 @@ Endpoints
 """
 from handlers.auth import AuthHandler, UserHandler
 from handlers.invitations import InvitationHandler
+from handlers.logs import LogHandler
 from handlers.topics import TopicHandler
 from handlers.news import NewsHandler
 from handlers.main import MainHandler
@@ -29,4 +30,8 @@ url_patterns = [
     # INVITATIONS
     (r'/invitations', InvitationHandler),
     (r'/invitations/(.+$)', InvitationHandler),
+
+    # LOGS
+    (r'/logs', LogHandler),
+    (r'/logs/(.+$)', LogHandler),
 ]

@@ -35,6 +35,9 @@ class TopicHandler(JsonAuthHandler):
             if 'languages' in request:
                 payload['languages'] = request['languages']
 
+            if 'domain_filter' in request:
+                payload['domain_filter'] = request['domain_filter']
+
             if 'is_active' in request:
                 payload['is_active'] = request['is_active']
 
@@ -60,7 +63,8 @@ class TopicHandler(JsonAuthHandler):
                     'description': request['description'],
                     'keywords': request['keywords'],
                     'languages': request['languages'],
-                    'is_active': request['is_active'] if 'is_active' in request else True
+                    'is_active': request['is_active'] if 'is_active' in request else True,
+                    'domain_filter': request['domain_filter'] if 'domain_filter' in request else []
                 }
 
                 self.response = post_topic(self.user_id, payload)

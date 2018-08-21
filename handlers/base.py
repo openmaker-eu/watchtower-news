@@ -1,5 +1,8 @@
 import tornado.web
 import json
+
+import tornado
+
 from logic.auth import get_user_with_api_token
 
 __author__ = 'Enis Simsar'
@@ -24,7 +27,7 @@ class JsonHandler(BaseHandler):
         # Incorporate request JSON into arguments dictionary.
         if self.request.body:
             try:
-                json_data = json.loads(self.request.body)
+                json_data = tornado.escape.json_decode(self.request.body)
                 self.request.arguments.update(json_data)
             except ValueError:
                 message = 'Unable to parse JSON.'

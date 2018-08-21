@@ -6,7 +6,6 @@ marshmallow-mongoengine==0.9.1
 mongoengine==0.15.3
 newspaper3k==0.2.6
 pymongo==3.6.0
-python-crontab==2.3.4
 python-decouple==3.1
 redis==2.10.6
 requests==2.18.4

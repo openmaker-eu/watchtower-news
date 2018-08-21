@@ -39,16 +39,6 @@ services:
         links:
         - rq-server:db
 
-#    crontab_module:
-#        restart: always
-#        container_name: crontab_module
-#        tty: true
-#        volumes:
-#            - "./:/root/cloud"
-#        build:
-#            context: ./
-#            dockerfile: ./.docker/crontab_module.docker
-
     rq-server:
         restart: always
         container_name: rq-server

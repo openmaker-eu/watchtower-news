@@ -13,8 +13,6 @@ class User(BaseDocument):
     password = StringField()
     api_token = StringField(max_length=40, default=''.join(
         [random.choice(string.ascii_letters + string.digits) for _ in range(40)]))
-    bookmarks = ListField(ObjectIdField())
-    domains = ListField(StringField())
     meta = {'collection': 'users'}
 
     def schema(self):

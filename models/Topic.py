@@ -15,6 +15,7 @@ class Topic(BaseDocument):
     keywords = ListField(StringField(), max_length=10, required=True)
     languages = ListField(StringField(max_length=2), max_length=5, required=True)
     is_active = BooleanField(default=True)
+    domain_filter = ListField(StringField(), default=[])
     last_tweet_at = DateTimeField(default=None)
     last_news_at = DateTimeField(default=None)
 
