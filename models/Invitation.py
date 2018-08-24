@@ -11,7 +11,7 @@ __author__ = 'Enis Simsar'
 
 class Invitation(BaseDocument):
     user_id = ReferenceField(User, reverse_delete_rule=CASCADE)
-    invitation_code = StringField(max_length=40, default=''.join(
+    invitation_code = StringField(max_length=40, min_length=40, default=''.join(
         [random.choice(string.ascii_letters + string.digits) for _ in range(40)]))
     is_active = BooleanField(default=True)
 

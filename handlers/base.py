@@ -1,8 +1,10 @@
+import os
+
 import tornado.web
-import json
-
 import tornado
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
+from settings import app_settings
 from logic.auth import get_user_with_api_token
 
 __author__ = 'Enis Simsar'
@@ -13,6 +15,38 @@ class BaseHandler(tornado.web.RequestHandler):
         pass
 
 
+class JinjaCustomFilter:
+    @classmethod
+    def debug(cls, text):
+        print(str(text))
+        return
+
+
+class TemplateRendering:
+    @classmethod
+    def render_template(cls, template_name, variables=None):
+        if variables is None:
+            variables = {}
+        env = Environment(loader=FileSystemLoader(app_settings['template_path']))
+        jcf = JinjaCustomFilter()
+        env.filters['debug'] = jcf.debug
+        try:
+            template = env.get_template(template_name)
+        except TemplateNotFound:
+            raise TemplateNotFound(template_name)
+
+        content = template.render(variables)
+        return content
+
+
+class StaticHandler(tornado.web.StaticFileHandler):
+    def data_received(self, chunk):
+        pass
+
+    def set_default_headers(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+
+
 class JsonHandler(BaseHandler):
     def __init__(self, application, request, **kwargs):
         self.response = None
@@ -21,7 +55,7 @@ class JsonHandler(BaseHandler):
     """Request handler where requests and responses speak JSON."""
 
     def prepare(self):
-        if 'Content-Type' not in self.request.headers or self.request.headers['Content-Type'] != 'application/json':
+        if self.request.body and ('Content-Type' not in self.request.headers or self.request.headers['Content-Type'] != 'application/json'):
             message = 'Please add "Content-Type: application/json" header.'
             self.send_error(400, message=message)  # Bad Request
         # Incorporate request JSON into arguments dictionary.
@@ -37,6 +71,9 @@ class JsonHandler(BaseHandler):
         self.response = dict()
 
     def set_default_headers(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Headers', 'Content-Type, api_key, authorization')
+        self.set_header('Access-Control-Allow-Methods', "GET, POST, DELETE, PUT, PATCH, OPTIONS")
         self.set_header('Content-Type', 'application/json')
 
     def write_error(self, status_code, **kwargs):
@@ -57,17 +94,9 @@ class JsonHandler(BaseHandler):
 def require_basic_auth(handler_class):
     def wrap_execute(handler_execute):
         def check_basic_auth(handler):
-            auth_header = handler.request.headers.get('Authorization')
-            if auth_header is None or not auth_header.startswith('Basic '):
-                handler.set_status(401)
-                handler.set_header('WWW-Authenticate', 'Basic realm=Restricted')  # noqa
-                handler._transforms = []
-                handler.finish()
-                return False
+            auth_header = handler.request.headers.get('X-API-Key')
 
-            api_token = auth_header[6:]
-
-            user = get_user_with_api_token(api_token)
+            user = get_user_with_api_token(auth_header)
 
             if user['response']:
                 handler.user_id = user['id']

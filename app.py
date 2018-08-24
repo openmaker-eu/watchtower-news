@@ -1,13 +1,23 @@
 """
 Watchtower Web Server
 """
+
 __author__ = 'Enis Simsar'
+
+import json
+
+from models.Invitation import InvitationSchema
+from models.News import NewsSchema
+from models.Topic import TopicSchema
+from models.Tweet import TweetSchema
+from models.User import UserSchema
 
 import tornado.ioloop
 from tornado.options import options
 import tornado.web
 
 from decouple import config
+from settings import app_settings
 
 from urls import url_patterns
 from logging import handlers
@@ -16,13 +26,9 @@ from mongoengine import connect
 import time
 import os
 
-secret_key = 'PEO+{+RlTK[3~}TS-F%[9J/sIp>W7!r*]YV75GZV)e;Q8lAdNE{m@oWK.+u-&z*-p>~Xa!Z8j~{z,BVv.e0GChY{(1.KVForO#rQ'
-
-app_settings = dict(
-    xsrf_cookies=False,
-    cookie_secret=secret_key,
-    port=config("HOST_PORT")
-)
+from apispec import APISpec
+from apispec.ext.tornado import TornadoPlugin
+from apispec.ext.marshmallow import MarshmallowPlugin
 
 os.makedirs('./logs', exist_ok=True)
 
@@ -44,6 +50,45 @@ logging.basicConfig(
         logging.StreamHandler()
     ],
 )
+
+spec = APISpec(
+    title='WatchTower News API',
+    version='1.0.0',
+    openapi_version='2.0',
+    plugins=(
+        TornadoPlugin(),
+        MarshmallowPlugin(),
+    ),
+    info=dict(
+        description='WatchTower News API'
+    ),
+    securityDefinitions=dict(
+        apiKey={
+            'type': 'apiKey',
+            'name': 'X-API-Key',
+            'in': 'header',
+            'description': 'API Key for Authorization'
+        }
+    ),
+    options={
+        'consumes': ['application/json'],
+        'produces': ['application/json']
+    }
+)
+
+spec.definition('User', schema=UserSchema)
+spec.definition('Topic', schema=TopicSchema)
+spec.definition('Invitation', schema=InvitationSchema)
+spec.definition('News', schema=NewsSchema)
+spec.definition('Tweet', schema=TweetSchema)
+
+for url_path in url_patterns:
+    if 'api' in url_path[0]:
+        spec.add_path(urlspec=url_path)
+    continue
+
+with open('./static/data.json', 'w') as outfile:
+    json.dump(spec.to_dict(), outfile)
 
 
 class WatchtowerNewsApp(tornado.web.Application):

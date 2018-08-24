@@ -15,3 +15,4 @@ tornado==5.0.2
 tweepy==3.6.0
 urllib3==1.22
 blinker==1.4
+apispec==0.39.0

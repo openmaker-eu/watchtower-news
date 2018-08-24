@@ -1,7 +1,6 @@
 import os
 import logging
 import glob
-print(glob.glob("/home/adam/*.txt"))
 
 __author__ = 'Enis Simsar'
 
@@ -48,7 +47,7 @@ def get_logs(user_id):
 
 
 def delete_log(user_id, log_file_name):
-    logging.info("user_id: {0}, invitation_id: {1}".format(user_id, log_file_name))
+    logging.info("user_id: {0}, log_file_name: {1}".format(user_id, log_file_name))
 
     if type(log_file_name) is not str:
         return {'error': 'log_file_name must be string!'}

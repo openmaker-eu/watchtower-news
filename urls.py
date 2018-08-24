@@ -1,37 +1,46 @@
 """
 Endpoints
 """
-from handlers.auth import AuthHandler, UserHandler
-from handlers.invitations import InvitationHandler
-from handlers.logs import LogHandler
-from handlers.topics import TopicHandler
+from handlers.auth import UserHandler, AuthHandler
+from handlers.base import StaticHandler
+from handlers.invitations import InvitationHandler, InvitationsHandler, InvitationPostHandler
+from handlers.logs import LogHandler, LogsHandler
+from handlers.swagger import SwaggerHandler
+from handlers.topics import TopicHandler, TopicsHandler, TopicPostHandler
 from handlers.news import NewsHandler
-from handlers.main import MainHandler
+
+from settings import app_settings
 
 __author__ = 'Enis Simsar'
 
 url_patterns = [
-    # MAIN - DOC
-    (r"/", MainHandler),
+    # ----- API ENDPOINTS ----- #
 
     # AUTH
-    (r"/auth", AuthHandler),
-    (r"/auth/(register)$", AuthHandler),
-    (r"/user", UserHandler),
-    (r"/user/(refresh_token)$", UserHandler),
+    (r"/api/auth", AuthHandler),
+    (r"/api/user", UserHandler),
 
     # TOPIC
-    (r"/topics", TopicHandler),
-    (r"/topics/(.+$)", TopicHandler),
+    (r"/api/topic", TopicPostHandler),
+    (r"/api/topic/(.*)$", TopicHandler),
+    (r"/api/topics", TopicsHandler),
 
     # NEWS
     (r"/News", NewsHandler),
 
     # INVITATIONS
-    (r'/invitations', InvitationHandler),
-    (r'/invitations/(.+$)', InvitationHandler),
+    (r"/api/invitation", InvitationPostHandler),
+    (r"/api/invitation/(.*)$", InvitationHandler),
+    (r"/api/invitations", InvitationsHandler),
 
     # LOGS
-    (r'/logs', LogHandler),
-    (r'/logs/(.+$)', LogHandler),
+    (r'/api/logs', LogsHandler),
+    (r'/api/log/(.*)$', LogHandler),
+
+
+    # ----- UI ENDPOINTS ----- #
+
+    (r'/', SwaggerHandler),
+
+    (r"/static/(.*)", StaticHandler, {'path': app_settings['template_path']}),
 ]
