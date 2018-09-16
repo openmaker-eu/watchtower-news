@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from mongoengine import ReferenceField, CASCADE, StringField, URLField, DateTimeField, ListField, DictField
 
 from models.Topic import Topic
@@ -42,3 +44,16 @@ class NewsSchema(BaseSchema):
 class NewsFactory(BaseFactory):
     class Meta:
         model = News
+
+    title = 'Lorem Ipsum'
+    full_text = 'Lorem Ipsum, Lorem'
+    summary = 'Lorem'
+    published_at = datetime.now
+    image = 'http://example.com'
+    url = 'http://example.com'
+    source = 'example.com'
+    domain = 'example'
+    authors = ['lorem', 'lorem_i']
+    language = 'en'
+    mentions = [{'user': 'lorem'}]
+    short_links = ['http://example.com']

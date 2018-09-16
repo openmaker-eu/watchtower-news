@@ -7,6 +7,7 @@ from models.Base import BaseDocument, BaseSchema, BaseFactory
 from decouple import config
 from redis import Redis, ConnectionPool
 from rq import Queue
+from datetime import datetime
 
 from utils import link_parser
 
@@ -65,3 +66,6 @@ class TweetSchema(BaseSchema):
 class TweetFactory(BaseFactory):
     class Meta:
         model = Tweet
+
+    entry = {'text': 'Lorem Ipsum', 'user': {'id': '222'}}
+    published_at = datetime.now
