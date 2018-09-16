@@ -30,7 +30,7 @@ def register_user(invitation_code, username, password):
     password = hash_password(password)
 
     try:
-        invitation = Invitation.objects.get(invitation_code=invitation_code, is_active=True)
+        invitation = Invitation.objects.get(code=invitation_code, is_active=True)
     except DoesNotExist:
         return {'response': False, 'error': 'Invitation Code is invalid.'}
     except Exception as e:

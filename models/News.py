@@ -1,7 +1,7 @@
 from mongoengine import ReferenceField, CASCADE, StringField, URLField, DateTimeField, ListField, DictField
 
 from models.Topic import Topic
-from models.Base import BaseDocument, BaseSchema
+from models.Base import BaseDocument, BaseSchema, BaseFactory
 
 __author__ = 'Enis Simsar'
 
@@ -35,5 +35,10 @@ class News(BaseDocument):
 
 
 class NewsSchema(BaseSchema):
+    class Meta:
+        model = News
+
+
+class NewsFactory(BaseFactory):
     class Meta:
         model = News

@@ -92,8 +92,8 @@ with open('./static/data.json', 'w') as outfile:
 
 
 class WatchtowerNewsApp(tornado.web.Application):
-    def __init__(self):
-        super(WatchtowerNewsApp, self).__init__(url_patterns, **app_settings, autoreload=True)
+    def __init__(self, testing=False):
+        super(WatchtowerNewsApp, self).__init__(url_patterns, **app_settings, autoreload=not testing)
 
 
 def main():

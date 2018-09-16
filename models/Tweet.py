@@ -2,7 +2,7 @@ from marshmallow_mongoengine import fields
 from mongoengine import ReferenceField, DateTimeField, DictField, CASCADE
 
 from models.Topic import Topic
-from models.Base import BaseDocument, BaseSchema
+from models.Base import BaseDocument, BaseSchema, BaseFactory
 
 from decouple import config
 from redis import Redis, ConnectionPool
@@ -60,3 +60,8 @@ class TweetSchema(BaseSchema):
     @staticmethod
     def _published_at_serializer(obj):
         return obj.published_at.timestamp()
+
+
+class TweetFactory(BaseFactory):
+    class Meta:
+        model = Tweet

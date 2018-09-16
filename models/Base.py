@@ -2,6 +2,7 @@ from datetime import datetime
 
 from marshmallow_mongoengine import ModelSchema, fields
 from mongoengine import Document, DateTimeField
+from factory.mongoengine import MongoEngineFactory
 
 __author__ = 'Enis Simsar'
 
@@ -44,3 +45,8 @@ class BaseSchema(ModelSchema):
     @staticmethod
     def _updated_at_serializer(obj):
         return obj.updated_at.timestamp()
+
+
+class BaseFactory(MongoEngineFactory):
+    class Meta:
+        pass

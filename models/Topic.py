@@ -3,7 +3,7 @@ from mongoengine import CASCADE, ReferenceField, StringField, ListField, Boolean
 from marshmallow_mongoengine import fields
 
 from models.User import User
-from models.Base import BaseDocument, BaseSchema
+from models.Base import BaseDocument, BaseSchema, BaseFactory
 
 __author__ = 'Enis Simsar'
 
@@ -46,3 +46,14 @@ class TopicSchema(BaseSchema):
     @staticmethod
     def _last_news_at_serializer(obj):
         return obj.last_news_at.timestamp()
+
+
+class TopicFactory(BaseFactory):
+    class Meta:
+        model = Topic
+
+    name = 'Topic Name'
+    description = 'Lorem Ipsum.'
+    keywords = ['Lorem', 'ipsum']
+    languages = ['tr', 'en']
+    is_active = False
