@@ -4,31 +4,31 @@ import json
 from mongoengine import DoesNotExist
 
 from models.Topic import Topic
-from models.News import News
+from models.Tweet import Tweet
 
 __author__ = 'Enis Simsar'
 
 
-def get_single_news(user_id, news_id):
-    logging.info("user_id: {0}, news_id: {1}".format(user_id, news_id))
-    if type(news_id) is not str:
-        return {'error': 'news_id must be string!'}
+def get_tweet(user_id, tweet_id):
+    logging.info("user_id: {0}, tweet_id: {1}".format(user_id, tweet_id))
+    if type(tweet_id) is not str:
+        return {'error': 'tweet_id must be string!'}
 
     try:
-        single_news = News.objects.get(id=news_id)
+        tweet = Tweet.objects.get(id=tweet_id)
     except DoesNotExist:
         return {}
     except Exception as e:
         logging.error("exception: {0}".format(str(e)))
         return {'error': str(e)}
 
-    if single_news is None:
+    if tweet is None:
         return {}
 
-    return single_news.to_dict()
+    return tweet.to_dict()
 
 
-def get_news(user_id, topic_id, skip, limit, order_by):
+def get_tweets(user_id, topic_id, skip, limit, order_by):
     logging.info(
         "user_id: {0}, topic_id: {1}, skip: {2}, limit: {3}, order_by: {4}".format(user_id, topic_id, skip, limit,
                                                                                    order_by))
@@ -42,40 +42,40 @@ def get_news(user_id, topic_id, skip, limit, order_by):
         return {'error': str(e)}
 
     try:
-        news = News.objects.filter(topic_id=topic.id).order_by(order_by)[skip: skip + limit]
+        tweets = Tweet.objects.filter(topic_id=topic.id).order_by(order_by)[skip: skip + limit]
     except DoesNotExist:
         return {}
     except Exception as e:
         logging.error("exception: {0}".format(str(e)))
         return {'error': str(e)}
 
-    if news is None:
+    if tweets is None:
         return json.dumps([])
 
-    news_json = []
+    tweets_json = []
 
-    for single_news in news:
-        news_json.append(single_news.to_dict())
+    for tweet in tweets:
+        tweets_json.append(tweet.to_dict())
 
-    return json.dumps(news_json)
+    return json.dumps(tweets_json)
 
 
-def delete_single_news(user_id, news_id):
-    logging.info("user_id: {0}, news_id: {1}".format(user_id, news_id))
-    if type(news_id) is not str:
-        return {'error': 'news_id must be string!'}
+def delete_tweet(user_id, tweet_id):
+    logging.info("user_id: {0}, tweet_id: {1}".format(user_id, tweet_id))
+    if type(tweet_id) is not str:
+        return {'error': 'tweet_id must be string!'}
 
     try:
-        single_news = News.objects.get(id=news_id)
+        tweet = Tweet.objects.get(id=tweet_id)
     except DoesNotExist:
         return {
-            'message': 'news not found',
+            'message': 'tweet not found',
             'response': False
         }
     except Exception as e:
         logging.error("exception: {0}".format(str(e)))
         return {'error': str(e)}
 
-    single_news.delete()
+    tweet.delete()
 
     return {'response': True}

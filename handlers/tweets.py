@@ -1,20 +1,20 @@
 """
-News Handlers for Watchtower News
+Tweets Handlers for Watchtower News
 """
 from handlers.base import JsonAuthHandler
-from logic.news import get_news, get_single_news, delete_single_news
+from logic.tweets import get_tweet, get_tweets, delete_tweet
 
 __author__ = 'Enis Simsar'
 
 
-class NewsHandler(JsonAuthHandler):
+class TweetsHandler(JsonAuthHandler):
     def get(self):
-        """News GET endpoint.
+        """Tweets GET endpoint.
         ---
         tags:
-            ['News']
-        description: Get News for logged User
-        summary: Get News for logged User
+            ['Tweet']
+        description: Get Tweets for logged User
+        summary: Get Tweets for logged User
         parameters:
             - in: query
               name: topic_id
@@ -41,10 +41,10 @@ class NewsHandler(JsonAuthHandler):
                 enum: [asc, desc]
         responses:
             200:
-                description: Get News for logged User
+                description: Get Tweets for logged User
                 schema:
                     type: array
-                    items: NewsSchema
+                    items: TweetSchema
         security:
             [apiKey: []]
         """
@@ -64,52 +64,52 @@ class NewsHandler(JsonAuthHandler):
             else:
                 order_by = '-' + order_field
 
-            self.response = get_news(self.user_id, topic_id, skip, limit, order_by)
+            self.response = get_tweets(self.user_id, topic_id, skip, limit, order_by)
 
         self.write_json()
 
 
-class SingleNewsHandler(JsonAuthHandler):
-    def get(self, news_id=None):
-        """News GET endpoint.
+class TweetHandler(JsonAuthHandler):
+    def get(self, tweet_id=None):
+        """Tweet GET endpoint.
         ---
         tags:
-            ['News']
-        description: Get A News
-        summary: Get A News
+            ['Tweet']
+        description: Get A Tweet
+        summary: Get A Tweet
         parameters:
             - in: path
-              name: news_id
+              name: tweet_id
               schema:
                 type: string
         responses:
             200:
-                description: Get A News
-                schema: NewsSchema
+                description: Get A Tweet
+                schema: TweetSchema
         security:
             [apiKey: []]
         """
-        self.response = get_single_news(self.user_id, news_id)
+        self.response = get_tweet(self.user_id, tweet_id)
 
         self.write_json()
 
-    def delete(self, news_id=None):
-        """News DELETE endpoint.
+    def delete(self, tweet_id=None):
+        """Tweet DELETE endpoint.
         ---
         tags:
-            ['News']
-        description: Delete A News
-        summary: Delete A News
+            ['Tweet']
+        description: Delete A Tweet
+        summary: Delete A Tweet
         parameters:
             - in: path
-              name: news_id
+              name: tweet_id
               schema:
                 type: string
         responses:
             200:
-                description: Delete A News
+                description: Delete A Tweet
         security:
             [apiKey: []]
         """
-        self.response = delete_single_news(self.user_id, news_id)
+        self.response = delete_tweet(self.user_id, tweet_id)
         self.write_json()

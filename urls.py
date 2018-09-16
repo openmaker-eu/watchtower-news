@@ -7,7 +7,8 @@ from handlers.invitations import InvitationHandler, InvitationsHandler, Invitati
 from handlers.logs import LogHandler, LogsHandler
 from handlers.swagger import SwaggerHandler
 from handlers.topics import TopicHandler, TopicsHandler, TopicPostHandler
-from handlers.news import NewsHandler
+from handlers.news import NewsHandler, SingleNewsHandler
+from handlers.tweets import TweetsHandler, TweetHandler
 
 from settings import app_settings
 
@@ -26,7 +27,12 @@ url_patterns = [
     (r"/api/topics", TopicsHandler),
 
     # NEWS
-    (r"/News", NewsHandler),
+    (r"/api/single_news/(.*)$", SingleNewsHandler),
+    (r"/api/news", NewsHandler),
+
+    # TWEETS
+    (r"/api/tweet/(.*)$", TweetHandler),
+    (r"/api/tweets", TweetsHandler),
 
     # INVITATIONS
     (r"/api/invitation", InvitationPostHandler),

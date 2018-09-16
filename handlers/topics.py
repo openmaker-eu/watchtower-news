@@ -183,6 +183,7 @@ class TopicHandler(JsonAuthHandler):
             payload['is_active'] = request['is_active']
 
         self.response = update_topic(self.user_id, topic_id, payload)
+        self.write_json()
 
     def delete(self, topic_id=None):
         """Topic DELETE endpoint.
@@ -202,12 +203,5 @@ class TopicHandler(JsonAuthHandler):
         security:
             [apiKey: []]
         """
-        if 'topic_id' not in self.request.arguments:
-            self.response = {'error': 'topic_id is required!'}
-            self.write_json()
-            return
-
-        topic_id = self.request.arguments['topic_id']
-
         self.response = delete_topic(self.user_id, topic_id)
         self.write_json()

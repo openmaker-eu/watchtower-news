@@ -117,7 +117,7 @@ def update_topic(user_id, topic_id, payload):
 
 
 def delete_topic(user_id, topic_id):
-    logging.info("user_id: {0}, invitation_id: {1}".format(user_id, topic_id))
+    logging.info("user_id: {0}, topic_id: {1}".format(user_id, topic_id))
     if type(topic_id) is not str:
         return {'error': 'topic_id must be string!'}
 
