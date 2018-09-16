@@ -1,6 +1,6 @@
 import json
 
-from models.Topic import TopicFactory, Topic
+from models.Topic import TopicFactory
 from models.User import UserFactory
 from tests.base import BaseTestCase
 
