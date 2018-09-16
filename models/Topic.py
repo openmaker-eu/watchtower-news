@@ -19,7 +19,14 @@ class Topic(BaseDocument):
     last_tweet_at = DateTimeField(default=None)
     last_news_at = DateTimeField(default=None)
 
-    meta = {'collection': 'topics'}
+    meta = {
+        'collection': 'topics',
+        'index_background': True,
+        'auto_create_index': True,
+        'indexes': [
+            'user_id'
+        ]
+    }
 
     def schema(self):
         return TopicSchema()

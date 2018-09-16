@@ -20,7 +20,15 @@ class News(BaseDocument):
     language = StringField()
     mentions = ListField(DictField())
     short_links = ListField(URLField())
-    meta = {'collection': 'news'}
+    meta = {
+        'collection': 'news',
+        'index_background': True,
+        'auto_create_index': True,
+        'indexes': [
+            'topic_id',
+            'published_at'
+        ]
+    }
 
     def schema(self):
         return NewsSchema()

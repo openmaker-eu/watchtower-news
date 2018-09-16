@@ -21,7 +21,15 @@ class Tweet(BaseDocument):
     topic_id = ReferenceField(Topic, reverse_delete_rule=CASCADE)
     entry = DictField(required=True)
     published_at = DateTimeField(required=True)
-    meta = {'collection': 'tweets'}
+    meta = {
+        'collection': 'tweets',
+        'index_background': True,
+        'auto_create_index': True,
+        'indexes': [
+            'topic_id',
+            'published_at'
+        ]
+    }
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):
