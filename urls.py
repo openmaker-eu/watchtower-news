@@ -18,8 +18,8 @@ url_patterns = [
     # ----- API ENDPOINTS ----- #
 
     # AUTH
-    (r"/api/auth", AuthHandler),
-    (r"/api/user", UserHandler),
+    # (r"/api/auth", AuthHandler),
+    # (r"/api/user", UserHandler),
 
     # TOPIC
     (r"/api/topic", TopicPostHandler),
@@ -31,17 +31,17 @@ url_patterns = [
     (r"/api/news", NewsHandler),
 
     # TWEETS
-    (r"/api/tweet/(.*)$", TweetHandler),
-    (r"/api/tweets", TweetsHandler),
+    # (r"/api/tweet/(.*)$", TweetHandler),
+    # (r"/api/tweets", TweetsHandler),
 
     # INVITATIONS
-    (r"/api/invitation", InvitationPostHandler),
-    (r"/api/invitation/(.*)$", InvitationHandler),
-    (r"/api/invitations", InvitationsHandler),
+    # (r"/api/invitation", InvitationPostHandler),
+    # (r"/api/invitation/(.*)$", InvitationHandler),
+    # (r"/api/invitations", InvitationsHandler),
 
     # LOGS
-    (r'/api/logs', LogsHandler),
-    (r'/api/log/(.*)$', LogHandler),
+    # (r'/api/logs', LogsHandler),
+    # (r'/api/log/(.*)$', LogHandler),
 
 
     # ----- UI ENDPOINTS ----- #

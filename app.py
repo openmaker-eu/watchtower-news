@@ -76,11 +76,11 @@ spec = APISpec(
     }
 )
 
-spec.definition('User', schema=UserSchema)
+# spec.definition('User', schema=UserSchema)
 spec.definition('Topic', schema=TopicSchema)
-spec.definition('Invitation', schema=InvitationSchema)
+# spec.definition('Invitation', schema=InvitationSchema)
 spec.definition('News', schema=NewsSchema)
-spec.definition('Tweet', schema=TweetSchema)
+# spec.definition('Tweet', schema=TweetSchema)
 
 for url_path in url_patterns:
     if 'api' in url_path[0]:

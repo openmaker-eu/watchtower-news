@@ -1,9 +1,9 @@
 import logging
 
-import tornado
 from decouple import config
 from mongoengine import connect
 from tornado.testing import AsyncHTTPTestCase
+from tornado.escape import json_decode
 
 from models.User import User
 from models.Invitation import Invitation
@@ -47,5 +47,5 @@ class BaseTestCase(AsyncHTTPTestCase):
             headers['X-API-Key'] = api_token
         resp = AsyncHTTPTestCase.fetch(self, url, headers=headers, *r, **kw)
         if resp.body:
-            resp._body = tornado.escape.json_decode(resp.body)
+            resp._body = json_decode(resp.body)
         return resp
