@@ -22,7 +22,11 @@ In a project we have needed to curate news, articles, blog posts for a (maker) c
 
 ### Prerequisites
 
+Docker and Docker Compose
+
 ### Installing
+
+`$ bash run.sh`
 
 ### License
 This project is licensed under the MIT License.
