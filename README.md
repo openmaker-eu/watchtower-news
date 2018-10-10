@@ -1,4 +1,4 @@
-# Watchtower-News:
+# Watchtower-News
 
 - Collect fresh and popular **news**, **articles** and **blog posts** around **topics that you define**. 
 - Publish this collected content through an **API**.
