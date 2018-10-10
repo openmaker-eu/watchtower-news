@@ -26,6 +26,10 @@ Docker and Docker Compose
 
 ### Installing
 
+`$ cp .env-example .env`
+
+Fill the .env file.
+
 `$ bash run.sh`
 
 ### License
