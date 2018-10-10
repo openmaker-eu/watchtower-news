@@ -10,7 +10,7 @@ from models.Invitation import InvitationSchema
 from models.News import NewsSchema
 from models.Topic import TopicSchema
 from models.Tweet import TweetSchema
-from models.User import UserSchema
+from models.User import UserSchema, User, hash_password
 
 import tornado.ioloop
 from tornado.options import options
@@ -22,7 +22,7 @@ from settings import app_settings
 from urls import url_patterns
 from logging import handlers
 import logging
-from mongoengine import connect
+from mongoengine import connect, DoesNotExist
 import time
 import os
 
@@ -60,7 +60,8 @@ spec = APISpec(
         MarshmallowPlugin(),
     ),
     info=dict(
-        description='WatchTower News API'
+        description='Default api token is "welcome_to_watchtower_news_api" Please, add this token to your header '
+                    'X-API-Key: "welcome_to_watchtower_news_api" '
     ),
     securityDefinitions=dict(
         apiKey={
@@ -91,6 +92,20 @@ with open('./static/data.json', 'w') as outfile:
     json.dump(spec.to_dict(), outfile)
 
 
+def add_admin_user():
+    data = {
+        'username': 'admin',
+        'password': hash_password('123456'),
+        'api_token': 'welcome_to_watchtower_news_api'
+    }
+    try:
+        user = User(**data)
+        user.save()
+    except Exception as e:
+        logging.error("exception: {0}".format(str(e)))
+        return {'error': str(e)}
+
+
 class WatchtowerNewsApp(tornado.web.Application):
     def __init__(self, testing=False):
         super(WatchtowerNewsApp, self).__init__(url_patterns, **app_settings, autoreload=not testing)
@@ -113,6 +128,15 @@ def main():
         authentication_source='admin',
         connect=False
     )
+
+    try:
+        u = User.objects.filter(username='admin')
+        if not len(u):
+            add_admin_user()
+    except DoesNotExist:
+        add_admin_user()
+    except Exception as e:
+        pass
 
     tornado.ioloop.IOLoop.current().start()
 
