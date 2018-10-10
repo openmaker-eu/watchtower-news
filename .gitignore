@@ -105,4 +105,5 @@ ENV/
 .idea/
 .idea/vcs.xml
 
-data/
+.data/
+.data
