@@ -1,7 +1,10 @@
 # Watchtower-News
 
+Watchtower-News is a topic-based news feed generator. 
+
 - Collect fresh and popular **news**, **articles** and **blog posts** around **topics that you define**. 
 - Publish this collected content through an **API**.
+- **Self-hosted** and **open source**.
 
 ## Why We Have Started This Project?
 
