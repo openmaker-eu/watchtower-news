@@ -2,9 +2,9 @@
 
 Watchtower-News is a topic-based news-feed generator. 
 
-- Collect fresh and popular **news**, **articles** and **blog posts** around **topics that you define**. 
-- Publish this collected content through an **API**.
-- **Self-hosted** and **open source**.
+- Collect fresh and popular **news**, **articles** and **blog posts** around **topics that you define**.
+- The news-feed(s) are automatically generated and accessible through a **Rest API**.
+- The system is **self-hosted** and **open source**.
 
 ## Why We Have Started This Project?
 
@@ -18,21 +18,21 @@ In a project we have needed to curate news, articles, blog posts for a (maker) c
 1. Collect tweets containing keywords that you define via [Twitter Streaming API](https://developer.twitter.com/en/docs/tweets/filter-realtime/overview),
 2. For a tweet contaning a link, follow the link to the end,
 3. Process the content: get the title, publish date, predict the language, summarize the content, select a representative image,
-4. Store raw and processed data on database (MongoDB),
-5. Publish data through an API.
+4. Store the raw and the processed data on a database (MongoDB),
+5. The news-feed is accesible through an API.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) according to your system
+- Install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/)
 - Create a Twitter App from https://apps.twitter.com/
 
 ### Installing
 
 `$ cp .env-example .env`
 
-Fill the .env file with your favorite editor.
+Fill the .env file with a text editor.
 
 `$ bash run.sh`
 
