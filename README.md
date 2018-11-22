@@ -25,13 +25,14 @@ In a project we have needed to curate news, articles, blog posts for a (maker) c
 
 ### Prerequisites
 
-Docker and Docker Compose
+- Install [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) according to your system
+- Create a Twitter App from https://apps.twitter.com/
 
 ### Installing
 
 `$ cp .env-example .env`
 
-Fill the .env file.
+Fill the .env file with your favorite editor.
 
 `$ bash run.sh`
 
