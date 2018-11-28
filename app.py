@@ -103,7 +103,6 @@ def add_admin_user():
         user.save()
     except Exception as e:
         logging.error("exception: {0}".format(str(e)))
-        return {'error': str(e)}
 
 
 class WatchtowerNewsApp(tornado.web.Application):
