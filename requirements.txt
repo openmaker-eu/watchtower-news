@@ -1,6 +1,6 @@
 beautifulsoup4==4.6.0
 jellyfish==0.6.1
-Jinja2==2.10
+Jinja2==2.11.3
 marshmallow==2.15.4
 marshmallow-mongoengine==0.9.1
 mongoengine==0.15.3
